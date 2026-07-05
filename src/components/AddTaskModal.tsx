@@ -4,14 +4,14 @@ import type { Task, TaskPriority, TaskCategory } from '../types/task';
 import { CATEGORIES } from '../types/task';
 import { playClickSound } from './AudioSynthesizer';
 
-interface AddTaskDrawerProps {
+interface AddTaskModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (taskData: Omit<Task, 'id' | 'completed' | 'createdAt' | 'actualTime'>) => void;
   taskToEdit?: Task | null;
 }
 
-export const AddTaskDrawer: React.FC<AddTaskDrawerProps> = ({
+export const AddTaskModal: React.FC<AddTaskModalProps> = ({
   isOpen,
   onClose,
   onSave,
@@ -67,13 +67,13 @@ export const AddTaskDrawer: React.FC<AddTaskDrawerProps> = ({
   };
 
   return (
-    <div className={`drawer-overlay ${isOpen ? 'open' : ''}`} onClick={handleClose}>
+    <div className={`modal-overlay ${isOpen ? 'open' : ''}`} onClick={handleClose}>
       <div 
-        className={`drawer-content ${shakeError ? 'shake' : ''}`} 
+        className={`modal-content ${shakeError ? 'shake' : ''}`} 
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="drawer-header">
-          <h2 className="drawer-title">
+        <div className="modal-header">
+          <h2 className="modal-title">
             {taskToEdit ? 'Edit Lock-In Task' : 'Add New Lock-In Task'}
           </h2>
           <button className="close-btn" onClick={handleClose}>
@@ -81,7 +81,7 @@ export const AddTaskDrawer: React.FC<AddTaskDrawerProps> = ({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="drawer-form">
+        <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
             <label className="form-label" htmlFor="task-title">What are we locking into?</label>
             <input
@@ -167,7 +167,7 @@ export const AddTaskDrawer: React.FC<AddTaskDrawerProps> = ({
             </div>
           </div>
 
-          <div className="drawer-footer">
+          <div className="modal-footer">
             <button type="button" className="secondary-btn" onClick={handleClose}>
               Cancel
             </button>

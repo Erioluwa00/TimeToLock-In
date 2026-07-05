@@ -94,7 +94,6 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       onDragOver={(e) => onDragOver(e, task.id)}
       onDrop={(e) => onDrop(e, task.id)}
       onDragEnd={onDragEnd}
-      style={{ borderLeft: `4px solid ${categoryInfo?.color || 'var(--border)'}` }}
     >
       <div className="task-header">
         <div className="checkbox-container">

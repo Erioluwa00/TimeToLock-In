@@ -4,7 +4,7 @@ import type { Task, DailyStreak, TaskCategory } from './types/task';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { TaskCard } from './components/TaskCard';
-import { AddTaskDrawer } from './components/AddTaskDrawer';
+import { AddTaskModal } from './components/AddTaskModal';
 import { FocusMode } from './components/FocusMode';
 import { playSuccessSound, playClickSound } from './components/AudioSynthesizer';
 import { Search, Plus, Menu } from 'lucide-react';
@@ -118,13 +118,42 @@ function App() {
         playSuccessSound();
         handleStreakCheck();
         
-        // Trigger confetti burst
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.7 },
-          colors: ['#6366f1', '#ec4899', '#10b981', '#f59e0b']
-        });
+        // Trigger a massive, immersive confetti celebration (multi-stage side cannons!)
+        const duration = 2.5 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+        const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+        const interval = window.setInterval(() => {
+          const timeLeft = animationEnd - Date.now();
+
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+
+          const particleCount = 60 * (timeLeft / duration);
+          
+          // Left side cannon
+          confetti({
+            ...defaults,
+            particleCount,
+            angle: randomInRange(55, 75),
+            spread: 55,
+            origin: { x: 0, y: 0.8 },
+            colors: ['#6366f1', '#ec4899', '#10b981']
+          });
+          
+          // Right side cannon
+          confetti({
+            ...defaults,
+            particleCount,
+            angle: randomInRange(105, 125),
+            spread: 55,
+            origin: { x: 1, y: 0.8 },
+            colors: ['#6366f1', '#ec4899', '#f59e0b']
+          });
+        }, 200);
       } else {
         playClickSound();
       }
@@ -396,8 +425,8 @@ function App() {
         </main>
       </div>
 
-      {/* Drawer Overlay for Add/Edit tasks */}
-      <AddTaskDrawer
+      {/* Modal Overlay for Add/Edit tasks */}
+      <AddTaskModal
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         onSave={handleSaveTask}
