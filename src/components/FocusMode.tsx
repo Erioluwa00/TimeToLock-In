@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { Task } from '../types/task';
-import { Play, Pause, RotateCcw, X, Check } from 'lucide-react';
+import { Play, Pause, RotateCcw, X, Check, Target } from 'lucide-react';
 import { playClickSound, playTimerEndSound } from './AudioSynthesizer';
 
 interface FocusModeProps {
@@ -72,9 +72,9 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
     const timeFormatted = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 
     if (timeLeft === 0) {
-      document.title = `🎉 Lock-In Done!`;
+      document.title = `Lock-In Done!`;
     } else {
-      document.title = `[${timeFormatted}] 🎯 Focus Mode | TimeToLock-In`;
+      document.title = `[${timeFormatted}] Focus Mode | TimeToLock-In`;
     }
 
     return () => {
@@ -87,8 +87,8 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
   const totalDuration = (task.estimatedTime || 25) * 60;
   const progressRatio = totalDuration > 0 ? timeLeft / totalDuration : 0;
   
-  // SVG Ring Calculations
-  const radius = 100;
+  // SVG Ring Calculations (Radius 120 matching the 240px container)
+  const radius = 120;
   const stroke = 8;
   const normalizedRadius = radius - stroke * 2;
   const circumference = normalizedRadius * 2 * Math.PI;
@@ -132,8 +132,8 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
     <div className={`focus-overlay ${isActive ? 'active' : ''}`}>
       <div className="focus-container animate-scale">
         <div className="focus-badge">
-          <span className="glow-dot" style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--accent)', marginRight: '8px' }} />
-          <span>🎯 Focus Active</span>
+          <Target size={14} style={{ marginRight: '6px' }} />
+          <span>Focus Active</span>
         </div>
 
         <div className="focus-task-info">
@@ -168,7 +168,7 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
           <div className="timer-display">
             <span className="timer-digits">{formatTime(timeLeft)}</span>
             <span className="timer-status">
-              {timeLeft === 0 ? 'Locked In! 🎉' : isRunning ? 'Keep focusing' : 'Paused'}
+              {timeLeft === 0 ? 'Locked In!' : isRunning ? 'Keep focusing' : 'Paused'}
             </span>
           </div>
         </div>

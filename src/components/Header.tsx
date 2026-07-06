@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Flame, Award } from 'lucide-react';
 import { playClickSound } from './AudioSynthesizer';
 
@@ -9,32 +9,6 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ streakCount, completedCount, totalCount }) => {
-  const [greeting, setGreeting] = useState("Hello");
-  const [timeStr, setTimeStr] = useState("");
-
-  useEffect(() => {
-    const updateTimeAndGreeting = () => {
-      const now = new Date();
-      const hrs = now.getHours();
-      
-      if (hrs < 12) setGreeting("Good morning ☀️");
-      else if (hrs < 18) setGreeting("Good afternoon 👋");
-      else setGreeting("Good evening 🌙");
-
-      const options: Intl.DateTimeFormatOptions = { 
-        weekday: 'short', 
-        month: 'short', 
-        day: 'numeric' 
-      };
-      setTimeStr(now.toLocaleDateString('en-US', options));
-    };
-
-    updateTimeAndGreeting();
-    // Update every minute
-    const interval = setInterval(updateTimeAndGreeting, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <header className="app-header glass">
       <div className="header-brand" onClick={() => playClickSound()}>
@@ -65,11 +39,6 @@ export const Header: React.FC<HeaderProps> = ({ streakCount, completedCount, tot
           <span className="brand-title">TimeToLock-In</span>
           <span className="brand-tagline">Focus & Get Done</span>
         </div>
-      </div>
-
-      <div className="header-greeting">
-        <h1 className="greeting-text">{greeting}</h1>
-        <p className="greeting-date">{timeStr}</p>
       </div>
 
       <div className="header-stats">

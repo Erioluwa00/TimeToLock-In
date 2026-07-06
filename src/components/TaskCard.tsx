@@ -1,7 +1,20 @@
 import React, { useRef } from 'react';
 import type { Task } from '../types/task';
 import { CATEGORIES } from '../types/task';
-import { Trash2, Edit2, Play, Calendar } from 'lucide-react';
+import { 
+  Trash2, 
+  Edit2, 
+  Play, 
+  Calendar, 
+  AlertCircle, 
+  Code, 
+  BookOpen, 
+  Home, 
+  Gamepad2, 
+  DollarSign, 
+  Heart, 
+  Target 
+} from 'lucide-react';
 import { playClickSound } from './AudioSynthesizer';
 
 interface TaskCardProps {
@@ -60,6 +73,19 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     }
   };
 
+  const renderCategoryIcon = (iconName: string) => {
+    const size = 12;
+    switch (iconName) {
+      case 'Code': return <Code size={size} />;
+      case 'BookOpen': return <BookOpen size={size} />;
+      case 'Home': return <Home size={size} />;
+      case 'Gamepad2': return <Gamepad2 size={size} />;
+      case 'DollarSign': return <DollarSign size={size} />;
+      case 'Heart': return <Heart size={size} />;
+      default: return null;
+    }
+  };
+
   // Format deadline string for display
   const displayDeadline = (dateStr?: string) => {
     if (!dateStr) return null;
@@ -72,14 +98,24 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     const tomorrowStr = tomorrow.toISOString().split('T')[0];
 
     if (dateStr === todayStr) {
-      return <span className="detail-tag tag-deadline" style={{ color: 'var(--priority-high)' }}>⚠️ Today</span>;
+      return (
+        <span className="detail-tag tag-deadline" style={{ color: 'var(--priority-high)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
+          <AlertCircle size={11} style={{ marginRight: '3px' }} />
+          Today
+        </span>
+      );
     } else if (dateStr === tomorrowStr) {
-      return <span className="detail-tag tag-deadline" style={{ color: 'var(--priority-medium)' }}>Tomorrow</span>;
+      return (
+        <span className="detail-tag tag-deadline" style={{ color: 'var(--priority-medium)' }}>
+          <Calendar size={11} style={{ marginRight: '3px' }} />
+          Tomorrow
+        </span>
+      );
     }
 
     return (
       <span className="detail-tag tag-deadline">
-        <Calendar size={11} />
+        <Calendar size={11} style={{ marginRight: '3px' }} />
         {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
       </span>
     );
@@ -113,13 +149,14 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           {task.priority}
         </span>
         <span className="detail-tag tag-category">
-          <span>{categoryInfo?.icon}</span>
+          {categoryInfo && renderCategoryIcon(categoryInfo.icon)}
           <span>{categoryInfo?.name}</span>
         </span>
         {displayDeadline(task.deadline)}
         {task.actualTime && task.actualTime > 0 ? (
-          <span className="detail-tag tag-category" style={{ color: 'var(--accent)' }}>
-            🎯 {task.actualTime}m focused
+          <span className="detail-tag tag-category" style={{ color: 'var(--accent)', borderColor: 'rgba(var(--accent-rgb), 0.2)' }}>
+            <Target size={11} style={{ marginRight: '3px' }} />
+            {task.actualTime}m focused
           </span>
         ) : null}
       </div>

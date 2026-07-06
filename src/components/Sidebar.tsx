@@ -71,12 +71,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   // Get a motivational quote based on completion rate
   const motivationalQuote = useMemo(() => {
-    if (tasks.length === 0) return "Add your first task and lock in! 🎯";
-    if (completionPercentage === 100) return "Phenomenal job! You finished everything! 🎉";
-    if (completionPercentage >= 80) return "Unstoppable! Almost at the finish line! 🚀";
-    if (completionPercentage >= 50) return "Halfway there! Keep up the momentum! 🔥";
-    if (completionPercentage > 0) return "Every task completed is progress! 💪";
-    return "Let's complete a task and start a streak! ✨";
+    if (tasks.length === 0) return "Add your first task and lock in!";
+    if (completionPercentage === 100) return "Phenomenal job! You finished everything!";
+    if (completionPercentage >= 80) return "Unstoppable! Almost at the finish line!";
+    if (completionPercentage >= 50) return "Halfway there! Keep up the momentum!";
+    if (completionPercentage > 0) return "Every task completed is progress!";
+    return "Let's complete a task and start a streak!";
   }, [completionPercentage, tasks.length]);
 
   const themesList: { name: AppTheme; label: string; color: string }[] = [
@@ -192,8 +192,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </h3>
         <ul className="sidebar-menu">
           <li className={activeCategory === null && activeFilter === 'all' ? '' : activeCategory === null ? 'active' : ''}>
-            <button onClick={() => handleCategoryClick(null)}>
-              <span>📂 All Categories</span>
+            <button onClick={() => handleCategoryClick(null)} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Folder size={16} />
+              <span>All Categories</span>
             </button>
           </li>
           {Object.values(CATEGORIES).map((cat) => (

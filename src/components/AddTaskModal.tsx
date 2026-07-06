@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Save } from 'lucide-react';
+import { 
+  X, 
+  Plus, 
+  Save, 
+  Code, 
+  BookOpen, 
+  Home, 
+  Gamepad2, 
+  DollarSign, 
+  Heart 
+} from 'lucide-react';
 import type { Task, TaskPriority, TaskCategory } from '../types/task';
 import { CATEGORIES } from '../types/task';
 import { playClickSound } from './AudioSynthesizer';
@@ -66,6 +76,19 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
     onClose();
   };
 
+  const renderCategoryIcon = (iconName: string) => {
+    const size = 14;
+    switch (iconName) {
+      case 'Code': return <Code size={size} />;
+      case 'BookOpen': return <BookOpen size={size} />;
+      case 'Home': return <Home size={size} />;
+      case 'Gamepad2': return <Gamepad2 size={size} />;
+      case 'DollarSign': return <DollarSign size={size} />;
+      case 'Heart': return <Heart size={size} />;
+      default: return null;
+    }
+  };
+
   return (
     <div className={`modal-overlay ${isOpen ? 'open' : ''}`} onClick={handleClose}>
       <div 
@@ -124,7 +147,10 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
                   onClick={() => { playClickSound(); setCategory(cat.id); }}
                 >
                   <span className="cat-dot" style={{ backgroundColor: cat.color }} />
-                  <span>{cat.icon} {cat.name}</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {renderCategoryIcon(cat.icon)}
+                    {cat.name}
+                  </span>
                 </button>
               ))}
             </div>

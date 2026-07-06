@@ -7,14 +7,14 @@ import { TaskCard } from './components/TaskCard';
 import { AddTaskModal } from './components/AddTaskModal';
 import { FocusMode } from './components/FocusMode';
 import { playSuccessSound, playClickSound } from './components/AudioSynthesizer';
-import { Search, Plus, Menu } from 'lucide-react';
+import { Search, Plus, Menu, ListTodo } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import './App.css';
 
 const SAMPLE_TASKS: Task[] = [
   {
     id: 'sample-1',
-    title: 'Finish TimeToLock-In portfolio project 🚀',
+    title: 'Finish TimeToLock-In portfolio project',
     priority: 'high',
     category: 'coding',
     deadline: new Date().toISOString().split('T')[0],
@@ -25,7 +25,7 @@ const SAMPLE_TASKS: Task[] = [
   },
   {
     id: 'sample-2',
-    title: 'Workout session: cardio and weights 🏋️',
+    title: 'Workout session: cardio and weights',
     priority: 'medium',
     category: 'health',
     deadline: new Date().toISOString().split('T')[0],
@@ -36,7 +36,7 @@ const SAMPLE_TASKS: Task[] = [
   },
   {
     id: 'sample-3',
-    title: 'Read Atomic Habits: Chapter 4 📚',
+    title: 'Read Atomic Habits: Chapter 4',
     priority: 'low',
     category: 'school',
     deadline: new Date().toISOString().split('T')[0],
@@ -47,7 +47,7 @@ const SAMPLE_TASKS: Task[] = [
   },
   {
     id: 'sample-4',
-    title: 'Learn advanced state hooks in React 💻',
+    title: 'Learn advanced state hooks in React',
     priority: 'medium',
     category: 'coding',
     completed: false,
@@ -360,7 +360,7 @@ function App() {
           <div className="tasks-columns">
             <div className="column-section">
               <h3 className="column-header">
-                🎯 Focus List ({activeFilteredTasks.length})
+                Focus List ({activeFilteredTasks.length})
               </h3>
               {activeFilteredTasks.length > 0 ? (
                 <div className="task-grid">
@@ -381,7 +381,7 @@ function App() {
                 </div>
               ) : activeFilter === 'all' && !activeCategory && !searchQuery ? (
                 <div className="empty-state">
-                  <div className="empty-icon">🎈</div>
+                  <ListTodo size={32} style={{ color: 'var(--text-muted)' }} />
                   <h4 className="empty-title">Nothing to lock into</h4>
                   <p className="empty-desc">You don't have any pending tasks. Create a new task to start locking in!</p>
                   <button className="primary-btn" onClick={handleAddTaskClick} style={{ marginTop: '8px' }}>
@@ -390,7 +390,7 @@ function App() {
                 </div>
               ) : (
                 <div className="empty-state">
-                  <div className="empty-icon">🔍</div>
+                  <Search size={32} style={{ color: 'var(--text-muted)' }} />
                   <h4 className="empty-title">No matching tasks</h4>
                   <p className="empty-desc">We couldn't find any tasks matching your filters or search term.</p>
                 </div>
@@ -401,7 +401,7 @@ function App() {
             {completedFilteredTasks.length > 0 && (
               <div className="column-section" style={{ marginTop: '16px' }}>
                 <h3 className="column-header">
-                  ✅ Completed ({completedFilteredTasks.length})
+                  Completed ({completedFilteredTasks.length})
                 </h3>
                 <div className="task-grid">
                   {completedFilteredTasks.map((task) => (

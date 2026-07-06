@@ -392,14 +392,15 @@
 
 /* Task Card Component */
 .task-card {
-  border-radius: 12px;
-  padding: 18px;
+  border-radius: 14px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   position: relative;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   cursor: grab;
+  min-height: 140px;
 }
 
 .task-card:hover {
@@ -928,7 +929,7 @@
 
 .timer-digits {
   font-family: 'Outfit', sans-serif;
-  font-size: 48px;
+  font-size: 56px;
   font-weight: 800;
   letter-spacing: -1px;
   color: var(--text-primary);
@@ -936,12 +937,12 @@
 }
 
 .timer-status {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   color: var(--text-secondary);
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .focus-controls {

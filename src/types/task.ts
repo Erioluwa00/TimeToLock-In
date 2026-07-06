@@ -30,10 +30,10 @@ export interface CategoryInfo {
 }
 
 export const CATEGORIES: Record<TaskCategory, CategoryInfo> = {
-  coding: { id: 'coding', name: 'Coding', icon: '💻', color: 'var(--cat-coding)' },
-  school: { id: 'school', name: 'School', icon: '📚', color: 'var(--cat-school)' },
-  personal: { id: 'personal', name: 'Personal', icon: '🏠', color: 'var(--cat-personal)' },
-  gaming: { id: 'gaming', name: 'Gaming', icon: '🎮', color: 'var(--cat-gaming)' },
-  finance: { id: 'finance', name: 'Finance', icon: '💰', color: 'var(--cat-finance)' },
-  health: { id: 'health', name: 'Health', icon: '❤️', color: 'var(--cat-health)' },
+  coding: { id: 'coding', name: 'Coding', icon: 'Code', color: 'var(--cat-coding)' },
+  school: { id: 'school', name: 'School', icon: 'BookOpen', color: 'var(--cat-school)' },
+  personal: { id: 'personal', name: 'Personal', icon: 'Home', color: 'var(--cat-personal)' },
+  gaming: { id: 'gaming', name: 'Gaming', icon: 'Gamepad2', color: 'var(--cat-gaming)' },
+  finance: { id: 'finance', name: 'Finance', icon: 'DollarSign', color: 'var(--cat-finance)' },
+  health: { id: 'health', name: 'Health', icon: 'Heart', color: 'var(--cat-health)' },
 };
