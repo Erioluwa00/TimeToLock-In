@@ -30,25 +30,12 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="header-brand" onClick={() => playClickSound()}>
           <div className="logo-container">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <filter id="logo-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="2.5" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-              </defs>
-              {/* Outer stopwatch ring */}
-              <circle cx="20" cy="22" r="12" stroke="var(--accent)" strokeWidth="3" filter="url(#logo-glow)" />
-              {/* Stopwatch top button / crown */}
-              <rect x="18.5" y="6" width="3" height="3.5" rx="0.5" fill="var(--accent)" />
-              {/* Stopwatch side clicker */}
-              <rect x="27.5" y="9.5" width="2" height="2.5" rx="0.5" transform="rotate(30 27.5 9.5)" fill="var(--accent)" />
-              {/* Crosshair lines (Target / Lock-In effect) */}
-              <line x1="20" y1="13.5" x2="20" y2="17" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="20" y1="27" x2="20" y2="30.5" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="11.5" y1="22" x2="15" y2="22" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-              <line x1="25" y1="22" x2="28.5" y2="22" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
-              {/* Inner focus target dot */}
-              <circle cx="20" cy="22" r="4" fill="var(--accent)" />
+              {/* Simple Clean Stopwatch Circle */}
+              <circle cx="20" cy="21" r="10" stroke="var(--accent)" strokeWidth="2.5" />
+              {/* Top crown button */}
+              <rect x="18.5" y="7" width="3" height="2" rx="0.5" fill="var(--accent)" />
+              {/* Target focus dot */}
+              <circle cx="20" cy="21" r="3.5" fill="var(--accent)" />
             </svg>
           </div>
           <div className="brand-text">
