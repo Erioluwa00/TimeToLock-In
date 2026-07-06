@@ -30,12 +30,12 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="header-brand" onClick={() => playClickSound()}>
           <div className="logo-container">
             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Simple Clean Stopwatch Circle */}
-              <circle cx="20" cy="21" r="10" stroke="var(--accent)" strokeWidth="2.5" />
+              {/* Simple Clean Bolder Stopwatch Circle */}
+              <circle cx="20" cy="22" r="16" stroke="var(--accent)" strokeWidth="3.5" />
               {/* Top crown button */}
-              <rect x="18.5" y="7" width="3" height="2" rx="0.5" fill="var(--accent)" />
+              <rect x="18" y="2" width="4" height="3" rx="0.5" fill="var(--accent)" />
               {/* Target focus dot */}
-              <circle cx="20" cy="21" r="3.5" fill="var(--accent)" />
+              <circle cx="20" cy="22" r="5.5" fill="var(--accent)" />
             </svg>
           </div>
           <div className="brand-text">
