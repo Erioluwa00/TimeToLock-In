@@ -7,7 +7,7 @@ import { TaskCard } from './components/TaskCard';
 import { AddTaskModal } from './components/AddTaskModal';
 import { FocusMode } from './components/FocusMode';
 import { playSuccessSound, playClickSound } from './components/AudioSynthesizer';
-import { Search, Plus, Menu, ListTodo } from 'lucide-react';
+import { Search, Plus, ListTodo } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import './App.css';
 
@@ -57,9 +57,15 @@ const SAMPLE_TASKS: Task[] = [
   }
 ];
 
+const getLocalDateString = (dateObj: Date = new Date()) => {
+  const offset = dateObj.getTimezoneOffset();
+  const localDate = new Date(dateObj.getTime() - (offset * 60 * 1000));
+  return localDate.toISOString().split('T')[0];
+};
+
 function App() {
   const [tasks, setTasks] = useLocalStorage<Task[]>('timetolockin-tasks', SAMPLE_TASKS);
-  const [streak, setStreak] = useLocalStorage<DailyStreak>('timetolockin-streak', { count: 1, lastActiveDate: new Date().toISOString().split('T')[0] });
+  const [streak, setStreak] = useLocalStorage<DailyStreak>('timetolockin-streak', { count: 1, lastActiveDate: getLocalDateString() });
   
   // Navigation / Filter States
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -82,14 +88,14 @@ function App() {
 
   // Calculate Streak increment
   const handleStreakCheck = () => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getLocalDateString();
     if (streak.lastActiveDate === todayStr) {
       return; // Already logged task completion today, streak stands
     }
 
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const yesterdayStr = getLocalDateString(yesterday);
 
     if (streak.lastActiveDate === yesterdayStr) {
       setStreak({ count: streak.count + 1, lastActiveDate: todayStr });
@@ -314,6 +320,7 @@ function App() {
         streakCount={streak.count} 
         completedCount={totalCompletedCount}
         totalCount={tasks.length}
+        onMenuClick={() => setIsSidebarOpen(true)}
       />
 
       <div className="app-content">
@@ -330,12 +337,7 @@ function App() {
         <main className="app-main">
           {/* Main workspace toolbar */}
           <div className="workspace-toolbar">
-            <button 
-              className="mobile-sidebar-toggle" 
-              onClick={() => { playClickSound(); setIsSidebarOpen(true); }}
-            >
-              <Menu size={20} />
-            </button>
+            {/* Mobile menu trigger is now integrated into top navbar Header */}
 
             <div className="search-container">
               <Search className="search-icon" size={16} />

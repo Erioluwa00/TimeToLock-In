@@ -990,17 +990,21 @@
 }
 
 /* Mobile Toggle Buttons */
-.mobile-sidebar-toggle {
+.mobile-sidebar-toggle-navbar {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.02);
   color: var(--text-primary);
-  margin-right: 12px;
+  transition: all 0.2s ease;
+}
+
+.mobile-sidebar-toggle-navbar:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* RESPONSIVE MEDIA QUERIES */
@@ -1023,24 +1027,12 @@
     display: block;
   }
 
-  .mobile-sidebar-toggle {
+  .mobile-sidebar-toggle-navbar {
     display: flex;
-  }
-  
-  .app-header {
-    justify-content: flex-start;
-  }
-  
-  .header-stats {
-    margin-left: auto;
   }
 }
 
 @media (max-width: 768px) {
-  .header-greeting {
-    display: none; /* Hide greeting to save space */
-  }
-
   .app-main {
     padding: 20px;
   }
@@ -1057,8 +1049,18 @@
   .primary-btn {
     justify-content: center;
   }
+}
 
-  .drawer-content {
-    width: 100%;
+@media (max-width: 600px) {
+  .streak-text-label, 
+  .progress-text-label, 
+  .brand-tagline {
+    display: none;
+  }
+  .stat-pill {
+    padding: 6px 10px;
+  }
+  .brand-title {
+    font-size: 18px;
   }
 }
