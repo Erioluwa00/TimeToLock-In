@@ -146,12 +146,6 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
         {/* Circular Timer Ring */}
         <div className="timer-ring-container">
           <svg className="timer-svg" width={radius * 2} height={radius * 2}>
-            <defs>
-              <linearGradient id="timer-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="var(--accent)" />
-                <stop offset="100%" stopColor="var(--accent-secondary)" />
-              </linearGradient>
-            </defs>
             <circle
               className="timer-circle-bg"
               fill="transparent"

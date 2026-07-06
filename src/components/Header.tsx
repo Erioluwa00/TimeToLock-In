@@ -41,26 +41,24 @@ export const Header: React.FC<HeaderProps> = ({ streakCount, completedCount, tot
         <div className="logo-container">
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="var(--accent)" />
-                <stop offset="100%" stopColor="var(--accent-secondary)" />
-              </linearGradient>
-              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
+              <filter id="logo-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="2.5" result="blur" />
                 <feComposite in="SourceGraphic" in2="blur" operator="over" />
               </filter>
             </defs>
-            {/* Padlock loop */}
-            <path d="M13 16V10.5C13 6.63401 16.134 3.5 20 3.5C23.866 3.5 27 6.63401 27 10.5V16" 
-                  stroke="url(#logo-grad)" 
-                  strokeWidth="3.2" 
-                  strokeLinecap="round" 
-            />
-            {/* Padlock body */}
-            <rect x="7" y="14" width="26" height="22" rx="6.5" fill="var(--bg-card)" stroke="url(#logo-grad)" strokeWidth="3.2" filter="url(#glow)" />
-            {/* Clock Circle */}
-            <circle cx="20" cy="25" r="5" stroke="var(--text-secondary)" strokeWidth="1.8" />
-            <path d="M20 22.5V25H22.5" stroke="url(#logo-grad)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Outer stopwatch ring */}
+            <circle cx="20" cy="22" r="12" stroke="var(--accent)" strokeWidth="3" filter="url(#logo-glow)" />
+            {/* Stopwatch top button / crown */}
+            <rect x="18.5" y="6" width="3" height="3.5" rx="0.5" fill="var(--accent)" />
+            {/* Stopwatch side clicker */}
+            <rect x="27.5" y="9.5" width="2" height="2.5" rx="0.5" transform="rotate(30 27.5 9.5)" fill="var(--accent)" />
+            {/* Crosshair lines (Target / Lock-In effect) */}
+            <line x1="20" y1="13.5" x2="20" y2="17" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="20" y1="27" x2="20" y2="30.5" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="11.5" y1="22" x2="15" y2="22" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
+            <line x1="25" y1="22" x2="28.5" y2="22" stroke="var(--accent)" strokeWidth="2.5" strokeLinecap="round" />
+            {/* Inner focus target dot */}
+            <circle cx="20" cy="22" r="4" fill="var(--accent)" />
           </svg>
         </div>
         <div className="brand-text">
