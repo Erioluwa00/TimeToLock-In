@@ -1,8 +1,5 @@
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  {/* Simple Clean Bolder Stopwatch Circle */}
   <circle cx="20" cy="22" r="16" stroke="#6366f1" strokeWidth="3.5" />
-  {/* Top crown button */}
   <rect x="18" y="2" width="4" height="3" rx="0.5" fill="#6366f1" />
-  {/* Target focus dot */}
   <circle cx="20" cy="22" r="5.5" fill="#6366f1" />
 </svg>
