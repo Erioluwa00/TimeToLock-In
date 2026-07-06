@@ -6,7 +6,7 @@ import { Sidebar } from './components/Sidebar';
 import { TaskCard } from './components/TaskCard';
 import { AddTaskModal } from './components/AddTaskModal';
 import { FocusMode } from './components/FocusMode';
-import { playSuccessSound, playClickSound } from './components/AudioSynthesizer';
+import { playSuccessSound, playClickSound, playConfettiPopSound } from './components/AudioSynthesizer';
 import { Search, Plus, ListTodo } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import './App.css';
@@ -122,6 +122,7 @@ function App() {
       if (isCompleting) {
         // Celebrations!
         playSuccessSound();
+        playConfettiPopSound();
         handleStreakCheck();
         
         // Trigger a massive, immersive confetti celebration (multi-stage side cannons!)

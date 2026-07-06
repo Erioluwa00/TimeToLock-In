@@ -277,3 +277,59 @@ export const updateAmbientVolume = (volume: number): void => {
     ambientGainNode.gain.setValueAtTime(volume, audioCtx.currentTime);
   }
 };
+
+/**
+ * Synthesizes a festive confetti pop and shower sound effect.
+ */
+export const playConfettiPopSound = (): void => {
+  try {
+    const ctx = getAudioContext();
+    const now = ctx.currentTime;
+
+    // 1. The POP Thump (quick transient lowpass-filtered noise)
+    const bufferSize = 0.05 * ctx.sampleRate; // very short duration
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = Math.random() * 2 - 1;
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    
+    const noiseFilter = ctx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 180; // deep pop thump
+    noiseFilter.Q.value = 2.0;
+
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.3, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(ctx.destination);
+    noise.start(now);
+
+    // 2. The Sparkle Shower (rising major arpeggio notes)
+    const notes = [587.33, 783.99, 1046.50, 1567.98]; // D5, G5, C6, G6
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+      
+      gain.gain.setValueAtTime(0, now + idx * 0.04);
+      gain.gain.linearRampToValueAtTime(0.08, now + idx * 0.04 + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.25);
+      
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      
+      osc.start(now + idx * 0.04);
+      osc.stop(now + idx * 0.04 + 0.3);
+    });
+  } catch (e) {
+    // Fail silently
+  }
+};
