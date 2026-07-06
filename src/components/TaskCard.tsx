@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import type { Task } from '../types/task';
 import { CATEGORIES } from '../types/task';
 import { 
@@ -13,7 +13,9 @@ import {
   Gamepad2, 
   DollarSign, 
   Heart, 
-  Target 
+  Target,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { playClickSound } from './AudioSynthesizer';
 
@@ -27,6 +29,7 @@ interface TaskCardProps {
   onDragOver: (e: React.DragEvent, id: string) => void;
   onDrop: (e: React.DragEvent, targetId: string) => void;
   onDragEnd: () => void;
+  onToggleSubtask: (taskId: string, subtaskId: string) => void;
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({
@@ -38,9 +41,11 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   onDragStart,
   onDragOver,
   onDrop,
-  onDragEnd
+  onDragEnd,
+  onToggleSubtask
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const categoryInfo = CATEGORIES[task.category];
 
   const handleCheckboxChange = () => {
@@ -63,6 +68,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     e.stopPropagation();
     playClickSound();
     onStartFocus(task);
+  };
+
+  const toggleExpand = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    playClickSound();
+    setIsExpanded(!isExpanded);
   };
 
   const getPriorityClass = (priority: string) => {
@@ -121,6 +132,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
     );
   };
 
+  const completedSubtasksCount = task.subtasks 
+    ? task.subtasks.filter(st => st.completed).length 
+    : 0;
+
   return (
     <div
       ref={cardRef}
@@ -159,7 +174,36 @@ export const TaskCard: React.FC<TaskCardProps> = ({
             {task.actualTime}m focused
           </span>
         ) : null}
+        {task.subtasks && task.subtasks.length > 0 && (
+          <button 
+            className={`detail-tag tag-category subtask-badge-btn ${isExpanded ? 'expanded' : ''}`}
+            onClick={toggleExpand}
+            title={isExpanded ? 'Collapse subtasks' : 'Expand subtasks'}
+          >
+            {isExpanded ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
+            <span>{completedSubtasksCount}/{task.subtasks.length} steps</span>
+          </button>
+        )}
       </div>
+
+      {/* Expanded subtask list */}
+      {task.subtasks && task.subtasks.length > 0 && isExpanded && (
+        <div className="task-card-subtasks-list" onClick={(e) => e.stopPropagation()}>
+          {task.subtasks.map((st) => (
+            <label key={st.id} className="task-card-subtask-item">
+              <input
+                type="checkbox"
+                className="subtask-checkbox"
+                checked={st.completed}
+                onChange={() => onToggleSubtask(task.id, st.id)}
+              />
+              <span className={`subtask-title ${st.completed ? 'completed' : ''}`}>
+                {st.title}
+              </span>
+            </label>
+          ))}
+        </div>
+      )}
 
       <div className="task-actions">
         {!task.completed && (

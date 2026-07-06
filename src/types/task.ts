@@ -2,6 +2,12 @@ export type TaskPriority = 'low' | 'medium' | 'high';
 
 export type TaskCategory = 'coding' | 'school' | 'personal' | 'gaming' | 'finance' | 'health';
 
+export interface SubTask {
+  id: string;
+  title: string;
+  completed: boolean;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -13,6 +19,7 @@ export interface Task {
   completedAt?: string;
   estimatedTime?: number; // In minutes, default 25
   actualTime?: number; // In minutes, accumulated focus session time
+  subtasks?: SubTask[];
 }
 
 export interface DailyStreak {

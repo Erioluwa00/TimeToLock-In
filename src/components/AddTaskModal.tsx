@@ -10,7 +10,7 @@ import {
   DollarSign, 
   Heart 
 } from 'lucide-react';
-import type { Task, TaskPriority, TaskCategory } from '../types/task';
+import type { Task, TaskPriority, TaskCategory, SubTask } from '../types/task';
 import { CATEGORIES } from '../types/task';
 import { playClickSound } from './AudioSynthesizer';
 
@@ -32,6 +32,8 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
   const [category, setCategory] = useState<TaskCategory>('personal');
   const [deadline, setDeadline] = useState('');
   const [estimatedTime, setEstimatedTime] = useState(25);
+  const [subtasks, setSubtasks] = useState<SubTask[]>([]);
+  const [subtaskInput, setSubtaskInput] = useState('');
   const [shakeError, setShakeError] = useState(false);
 
   useEffect(() => {
@@ -41,14 +43,36 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
       setCategory(taskToEdit.category);
       setDeadline(taskToEdit.deadline || '');
       setEstimatedTime(taskToEdit.estimatedTime || 25);
+      setSubtasks(taskToEdit.subtasks || []);
     } else {
       setTitle('');
       setPriority('medium');
       setCategory('personal');
       setDeadline('');
       setEstimatedTime(25);
+      setSubtasks([]);
     }
+    setSubtaskInput('');
   }, [taskToEdit, isOpen]);
+
+  const handleAddSubtask = () => {
+    if (!subtaskInput.trim()) return;
+    playClickSound();
+    setSubtasks([
+      ...subtasks,
+      {
+        id: Math.random().toString(36).substring(2, 9),
+        title: subtaskInput.trim(),
+        completed: false
+      }
+    ]);
+    setSubtaskInput('');
+  };
+
+  const handleRemoveSubtask = (id: string) => {
+    playClickSound();
+    setSubtasks(subtasks.filter(st => st.id !== id));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +90,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
       category,
       deadline: deadline || undefined,
       estimatedTime: Number(estimatedTime) || 25,
+      subtasks: subtasks.length > 0 ? subtasks : undefined,
     });
     
     onClose();
@@ -154,6 +179,50 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Subtasks (Optional)</label>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="Add a step (e.g. Design wireframes)"
+                value={subtaskInput}
+                onChange={(e) => setSubtaskInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleAddSubtask();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="primary-btn"
+                style={{ padding: '0 16px', height: '42px', flexShrink: 0 }}
+                onClick={handleAddSubtask}
+              >
+                <Plus size={16} />
+              </button>
+            </div>
+            {subtasks.length > 0 && (
+              <div className="modal-subtasks-container">
+                {subtasks.map((st) => (
+                  <div key={st.id} className="modal-subtask-item">
+                    <span className="modal-subtask-title">{st.title}</span>
+                    <button
+                      type="button"
+                      className="modal-subtask-delete-btn"
+                      onClick={() => handleRemoveSubtask(st.id)}
+                      title="Remove step"
+                    >
+                      <X size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="form-group">

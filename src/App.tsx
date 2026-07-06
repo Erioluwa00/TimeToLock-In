@@ -208,11 +208,26 @@ function App() {
         estimatedTime: taskData.estimatedTime,
         completed: false,
         createdAt: new Date().toISOString(),
-        actualTime: 0
+        actualTime: 0,
+        subtasks: taskData.subtasks
       };
       setTasks((prevTasks) => [newTask, ...prevTasks]);
     }
     setTaskToEdit(null);
+  };
+
+  const handleToggleSubtask = (taskId: string, subtaskId: string) => {
+    playClickSound();
+    setTasks((prevTasks) =>
+      prevTasks.map((t) => {
+        if (t.id !== taskId) return t;
+        const subtasks = t.subtasks?.map((st) => {
+          if (st.id !== subtaskId) return st;
+          return { ...st, completed: !st.completed };
+        });
+        return { ...t, subtasks };
+      })
+    );
   };
 
   // Start Focus Mode
@@ -378,6 +393,7 @@ function App() {
                       onDragOver={handleDragOver}
                       onDrop={handleDrop}
                       onDragEnd={handleDragEnd}
+                      onToggleSubtask={handleToggleSubtask}
                     />
                   ))}
                 </div>
@@ -418,6 +434,7 @@ function App() {
                       onDragOver={handleDragOver}
                       onDrop={handleDrop}
                       onDragEnd={handleDragEnd}
+                      onToggleSubtask={handleToggleSubtask}
                     />
                   ))}
                 </div>

@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import type { Task } from '../types/task';
-import { Play, Pause, RotateCcw, X, Check, Target } from 'lucide-react';
-import { playClickSound, playTimerEndSound } from './AudioSynthesizer';
+import { Play, Pause, RotateCcw, X, Check, Target, Volume2, Music } from 'lucide-react';
+import { 
+  playClickSound, 
+  playTimerEndSound, 
+  playZenBell, 
+  playRetroChime,
+  startAmbientNoise,
+  stopAmbientNoise,
+  updateAmbientVolume
+} from './AudioSynthesizer';
 
 interface FocusModeProps {
   isActive: boolean;
@@ -14,6 +22,12 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
   const [timeLeft, setTimeLeft] = useState(defaultDuration);
   const [isRunning, setIsRunning] = useState(false);
   const [accumulatedTime, setAccumulatedTime] = useState(0); // in seconds
+  
+  // Audio Preferences
+  const [ambientType, setAmbientType] = useState<'off' | 'rain' | 'white' | 'waves'>('off');
+  const [ambientVolume, setAmbientVolume] = useState<number>(0.25);
+  const [alarmType, setAlarmType] = useState<'default' | 'bell' | 'retro'>('default');
+
   const timerRef = useRef<number | null>(null);
 
   // Initialize/Reset timer when task changes or overlay opens
@@ -41,7 +55,7 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
             // Timer finished
             setIsRunning(false);
             if (timerRef.current) clearInterval(timerRef.current);
-            playTimerEndSound();
+            playSelectedAlarm();
             return 0;
           }
           setAccumulatedTime((acc) => acc + 1);
@@ -61,6 +75,29 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
       }
     };
   }, [isRunning, timeLeft]);
+
+  // Handle ambient noise play state
+  useEffect(() => {
+    if (isActive && isRunning && ambientType !== 'off') {
+      startAmbientNoise(ambientType, ambientVolume);
+    } else {
+      stopAmbientNoise();
+    }
+  }, [isActive, isRunning, ambientType]);
+
+  // Handle ambient volume change
+  useEffect(() => {
+    if (isActive && isRunning && ambientType !== 'off') {
+      updateAmbientVolume(ambientVolume);
+    }
+  }, [ambientVolume, isActive, isRunning, ambientType]);
+
+  // Cleanup ambient audio on unmount or quit
+  useEffect(() => {
+    return () => {
+      stopAmbientNoise();
+    };
+  }, []);
 
   // Update browser tab title with countdown status
   useEffect(() => {
@@ -100,6 +137,16 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
     return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
+  const playSelectedAlarm = () => {
+    if (alarmType === 'bell') {
+      playZenBell();
+    } else if (alarmType === 'retro') {
+      playRetroChime();
+    } else {
+      playTimerEndSound();
+    }
+  };
+
   const handleTogglePlay = () => {
     playClickSound();
     setIsRunning(!isRunning);
@@ -114,12 +161,13 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
   const handleSkip = () => {
     playClickSound();
     setIsRunning(false);
-    playTimerEndSound();
+    playSelectedAlarm();
     setTimeLeft(0);
   };
 
   const handleQuit = () => {
     playClickSound();
+    stopAmbientNoise();
     // Round accumulated seconds to nearest minute
     const minutesFocused = Math.round(accumulatedTime / 60) || (accumulatedTime > 30 ? 1 : 0);
     // Did they actually finish the Pomodoro timer?
@@ -208,6 +256,69 @@ export const FocusMode: React.FC<FocusModeProps> = ({ isActive, task, onQuit }) 
             >
               <Check size={20} />
             </button>
+          )}
+        </div>
+
+        {/* Ambient Settings Panel */}
+        <div className="ambient-settings glass-panel">
+          <div className="settings-row">
+            <div className="setting-item">
+              <span className="setting-label">
+                <Music size={12} style={{ marginRight: '4px' }} /> Focus Sound
+              </span>
+              <select 
+                className="setting-select"
+                value={ambientType}
+                onChange={(e) => {
+                  playClickSound();
+                  setAmbientType(e.target.value as any);
+                }}
+              >
+                <option value="off">Off</option>
+                <option value="rain">Soft Rain</option>
+                <option value="white">White Noise</option>
+                <option value="waves">Ocean Waves</option>
+              </select>
+            </div>
+
+            <div className="setting-item">
+              <span className="setting-label">
+                <Target size={12} style={{ marginRight: '4px' }} /> Alarm Tone
+              </span>
+              <select 
+                className="setting-select"
+                value={alarmType}
+                onChange={(e) => {
+                  playClickSound();
+                  const newAlarm = e.target.value as any;
+                  setAlarmType(newAlarm);
+                  // Preview alarm tone
+                  if (newAlarm === 'bell') playZenBell();
+                  else if (newAlarm === 'retro') playRetroChime();
+                  else playTimerEndSound();
+                }}
+              >
+                <option value="default">Standard Chime</option>
+                <option value="bell">Zen Bell</option>
+                <option value="retro">Retro Triplet</option>
+              </select>
+            </div>
+          </div>
+
+          {ambientType !== 'off' && (
+            <div className="volume-slider-container">
+              <Volume2 size={13} style={{ color: 'var(--text-secondary)' }} />
+              <input
+                type="range"
+                min="0"
+                max="0.8"
+                step="0.05"
+                className="volume-slider"
+                value={ambientVolume}
+                onChange={(e) => setAmbientVolume(Number(e.target.value))}
+                title="Ambient Volume"
+              />
+            </div>
           )}
         </div>
 
